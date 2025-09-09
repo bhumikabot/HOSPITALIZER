@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospitalizer</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo" style="font-family:'Pacifico',cursive;font-size:2.2em;color:#ffd700;letter-spacing:2px;">Hospitalizer</div>
+        <div class="menu" style="display:flex;gap:2em;align-items:center;">
+            <a href="#home" class="tab-link nav-btn" data-tab="home">Home</a>
+            <a href="#hospitals" class="tab-link nav-btn" data-tab="hospitals">Search</a>
+            <a href="#colleges" class="tab-link nav-btn" data-tab="colleges">Hospitals</a>
+            <a href="#contact" class="tab-link nav-btn" data-tab="contact">Contact</a>
+        </div>
+        <div class="profile" style="display:flex;gap:1em;align-items:center;">
+            <a href="#signin" class="tab-link nav-btn" data-tab="signin">Sign In</a>
+            <a href="#profile" class="tab-link nav-btn" data-tab="profile">Profile</a>
+        </div>
+    </nav>
+    <div class="main-content">
+        <div class="tab-content" id="home" style="display:block;">
+            <div class="status-bar">
+                <span>Status: Showing all hospitals in your area</span>
+            </div>
+            <h1 style="font-size:2.5rem;color:#ffd700;text-shadow:2px 2px 10px #333;">Welcome to Hospital Locator</h1>
+            <div class="search-bar" style="margin-top:2rem;">
+                <input type="text" id="homeSearchInput" placeholder="Search hospitals...">
+                <button id="homeSearchBtn">Search</button>
+            </div>
+            <div style="margin-top:2rem;">
+                <h3 style="color:#00bcd4;">Emergency Info</h3>
+                <ul style="font-size:1.1rem;">
+                    <li>Ambulance Helpline: <b>108</b></li>
+                    <li>Police Helpline: <b>100</b></li>
+                    <li>Fire Helpline: <b>101</b></li>
+                    <li>National Health Helpline: <b>1800-180-1104</b></li>
+                </ul>
+                <div style="margin-top:1.5rem;font-size:1.1rem;color:#333;background:rgba(255,255,255,0.5);border-radius:8px;padding:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+                    <b>Fun Fact:</b> Rajasthan is home to one of the largest hospital networks in India, serving millions every year!
+                </div>
+            </div>
+        </div>
+        <div class="tab-content" id="hospitals" style="display:none;">
+            <section class="hospital-list">
+                <h2>Hospitals Nearby</h2>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search hospitals...">
+                    <button id="searchBtn">Search</button>
+                </div>
+                <!-- Hospital entries will be listed here -->
+            </section>
+        </div>
+        <div class="tab-content" id="contact" style="display:none;">
+            <h2>Contact Us</h2>
+            <p>Email: info@hospitallocator.com</p>
+            <p>Phone: 1800-000-0000</p>
+        </div>
+        <div class="tab-content" id="signin" style="display:none;">
+            <h2>Sign In</h2>
+            <form id="loginForm" autocomplete="off">
+                <input type="email" id="emailInput" placeholder="Email (must be @gmail.com)" required><br><br>
+                <input type="password" id="passwordInput" placeholder="Password (min 8 characters)" minlength="8" required><br><br>
+                <button type="submit">Sign In</button>
+                <div id="loginError" style="color:red;margin-top:10px;display:none;"></div>
+            </form>
+        </div>
+        <div class="tab-content" id="profile" style="display:none;">
+            <h2>Your Profile</h2>
+            <p>Profile details will appear here after sign in.</p>
+        </div>
+        <div class="tab-content" id="colleges" style="display:none;">
+            <!-- Removed Colleges heading for cleaner look -->
+            <div class="college-list" style="display:flex;flex-wrap:wrap;gap:2em;justify-content:center;"></div>
+        </div>
+    </div>
+</body>
+<script src="script.js"></script>
+<script>
+// 50 hospital entries for college section
+const collegeHospitals = [
+    { name: "SMS Hospital", website: "https://www.smshospitaljaipur.org/", address: "Jaipur", timings: "24 Hours" },
+    { name: "Fortis Escorts Hospital", website: "https://www.fortishealthcare.com/india/fortis-escorts-hospital-jaipur", address: "Jaipur", timings: "24 Hours" },
+    { name: "Apollo Spectra Hospitals", website: "https://www.apollospectra.com/hospital/jaipur", address: "Jaipur", timings: "8 AM - 8 PM" },
+    { name: "Manipal Hospitals", website: "https://www.manipalhospitals.com/jaipur/", address: "Jaipur", timings: "24 Hours" },
+    { name: "Narayana Multispeciality Hospital", website: "https://www.narayanahealth.org/hospitals/jaipur/narayana-multispeciality-hospital-jaipur", address: "Jaipur", timings: "24 Hours" },
+    { name: "CK Birla Hospital", website: "https://www.ckbhospital.com/jaipur/", address: "Jaipur", timings: "24 Hours" },
+    { name: "Rukmani Birla Hospital", website: "https://www.rbh.ckbirlahospital.com/", address: "Jaipur", timings: "24 Hours" },
+    { name: "Santokba Durlabhji Memorial Hospital", website: "https://www.sdmh.in/", address: "Jaipur", timings: "24 Hours" },
+    { name: "Eternal Hospital", website: "https://www.eternalhospital.com/", address: "Jaipur", timings: "24 Hours" },
+    { name: "Mahatma Gandhi Hospital", website: "https://www.mgmch.org/", address: "Jaipur", timings: "24 Hours" },
+    // ...add more hospitals as needed...
+];
+function renderCollegeHospitals() {
+    const list = document.querySelector('.college-list');
+    let html = '';
+    collegeHospitals.forEach(hospital => {
+        html += `<div>
+            <div class="college-name">${hospital.name}</div>
+            <div class="college-address">${hospital.address}</div>
+            <div class="college-timings">Timings: <span>${hospital.timings}</span></div>
+            <a href="${hospital.website}" target="_blank" class="official-link">Official Site</a>
+        </div>`;
+    });
+    list.innerHTML = html;
+}
+document.addEventListener('DOMContentLoaded', function() {
+    renderCollegeHospitals();
+    // Fix tab navigation for all tabs
+    var navbar = document.querySelector('.navbar');
+    if(navbar) {
+        navbar.addEventListener('click', function(e) {
+            const link = e.target.closest('.tab-link');
+            if(link) {
+                e.preventDefault();
+                const tab = link.getAttribute('data-tab');
+                document.querySelectorAll('.tab-content').forEach(tabEl => {
+                    tabEl.style.display = 'none';
+                    tabEl.classList.remove('active');
+                });
+                const activeTab = document.getElementById(tab);
+                if (activeTab) {
+                    activeTab.style.display = 'block';
+                    activeTab.classList.add('active');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+        });
+    }
+});
+</script>
+</html>
